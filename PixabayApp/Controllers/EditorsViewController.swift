@@ -7,9 +7,10 @@
 
 import UIKit
 
-private let reuseIdentifier = "Cell"
-
 class EditorsViewController: UICollectionViewController {
+    
+    private var images: [UIImage?] = []
+    private var imageInfo = [ImageInfo]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,36 +19,66 @@ class EditorsViewController: UICollectionViewController {
         // self.clearsSelectionOnViewWillAppear = false
 
         // Register cell classes
-        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: ImageCell.identifier)
 
         // Do any additional setup after loading the view.
     }
 
     
 
-    // MARK: UICollectionViewDataSource
-
+    
+    
+    
+    // MARK: DataSource
+/*
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 0
     }
-
+*/
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
-        return 0
+        return images.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
-    
-        // Configure the cell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCell.identifier, for: indexPath) as? ImageCell else{
+            fatalError("Invalid Cell kind")
+        }
+        cell.configure(with: images[indexPath.row])
     
         return cell
     }
+    
+    
+    // MARK: flow layout
+    private let spacing: CGFloat = 20
+    private let numberOfItemsPerRow: CGFloat = 3
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let width = view.bounds.width
+        let summarySpacing = spacing * (numberOfItemsPerRow - 1)
+        let insets = 2  * spacing
+        
+        let cellWidth = (width - summarySpacing - insets) / numberOfItemsPerRow
+        return CGSize(width: cellWidth, height: cellWidth)
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        
+        UIEdgeInsets(top: spacing, left: spacing, bottom: spacing, right: spacing)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        spacing
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        spacing
+    }
 
-    
-    
     
     
     
