@@ -74,11 +74,13 @@ class EditorsViewController: UICollectionViewController {
     
         return cell
     }
-    
-    
+}
+
+private let numberOfItemsPerRow: CGFloat = 3
+private let spacing: CGFloat = 5
+
+extension EditorsViewController: UICollectionViewDelegateFlowLayout{
     // MARK: flow layout
-    private let spacing: CGFloat = 10
-    private let numberOfItemsPerRow: CGFloat = 2
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
@@ -105,7 +107,7 @@ class EditorsViewController: UICollectionViewController {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         spacing
     }
-
+}
     
     
     
@@ -154,4 +156,4 @@ class EditorsViewController: UICollectionViewController {
     
     }
 */
-}
+//}
