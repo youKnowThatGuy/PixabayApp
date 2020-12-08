@@ -10,21 +10,46 @@ import UIKit
 class EditorsViewController: UICollectionViewController {
     
     private var images: [UIImage?] = []
-    private var imageInfo = [ImageInfo]()
+    private var imagesInfo = [ImageInfo]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        loadImages()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
-        // Register cell classes
-        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: ImageCell.identifier)
+         //Register cell classes
+        //self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: ImageCell.identifier)
 
         // Do any additional setup after loading the view.
     }
-
     
+    
+    private func loadImages(){
+        NetworkService.shared.fetchImages(amount: 60) { (result) in
+            switch result{
+            case let .failure(error):
+                print(error)
+            
+            case let .success(imagesInfo):
+                self.imagesInfo = imagesInfo
+                self.images = Array(repeating: nil, count: imagesInfo.count)
+                self.collectionView.reloadData()
+            }
+        }
+    }
+
+    private func loadSingleImage(for cell: ImageCell, at index: Int){
+        let info = imagesInfo[index]
+        if let image = images[index]{
+            cell.configure(with: image)
+            return
+        }
+        NetworkService.shared.loadImage(from: info.previewURL) { (image) in
+            self.images[index] = image
+            cell.configure(with: self.images[index])
+        }
+    }
 
     
     
@@ -38,30 +63,32 @@ class EditorsViewController: UICollectionViewController {
 */
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return images.count
+        return imagesInfo.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCell.identifier, for: indexPath) as? ImageCell else{
             fatalError("Invalid Cell kind")
         }
-        cell.configure(with: images[indexPath.row])
+        loadSingleImage(for: cell, at: indexPath.row)
     
         return cell
     }
     
     
     // MARK: flow layout
-    private let spacing: CGFloat = 20
-    private let numberOfItemsPerRow: CGFloat = 3
+    private let spacing: CGFloat = 10
+    private let numberOfItemsPerRow: CGFloat = 2
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let width = view.bounds.width
         let summarySpacing = spacing * (numberOfItemsPerRow - 1)
         let insets = 2  * spacing
+        let rawWidth = width - summarySpacing - insets
         
-        let cellWidth = (width - summarySpacing - insets) / numberOfItemsPerRow
+        let cellWidth = rawWidth / numberOfItemsPerRow
+        
         return CGSize(width: cellWidth, height: cellWidth)
         
     }

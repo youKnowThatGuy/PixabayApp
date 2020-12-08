@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 class NetworkService{
     private init(){}
@@ -24,12 +25,21 @@ class NetworkService{
     }
     
     
-    func loadImage(from url: URL?, completion: @escaping () -> Void){
-        
-        
-        
-        
-        
+    func loadImage(from url: URL?, completion: @escaping (UIImage?) -> Void){
+        guard let url = url else{
+            completion(nil)
+            return
+        }
+        URLSession.shared.dataTask(with: url) { (data, _, _) in
+            DispatchQueue.main.async {
+                if let data = data{
+                    completion(UIImage(data: data))
+                }
+                else{
+                    completion(nil)
+                }
+            }
+        }.resume()
     }
     
     func fetchImages(amount: Int, completion: @escaping (Result<[ ImageInfo], SessionError>) -> Void){
@@ -75,7 +85,6 @@ class NetworkService{
             }
             
         }.resume()
-        
-        
     }
+    
 }
