@@ -10,5 +10,5 @@ import Foundation
 struct ImageInfo: Decodable{
     var id: Int
     var previewURL: URL?
-    var fullSizeURL: URL?
+    var imageURL: URL?
 }

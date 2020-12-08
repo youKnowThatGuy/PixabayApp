@@ -12,7 +12,7 @@ class NetworkService{
                         
     static let shared = NetworkService()
     
-    private let apiKey = "1121314"
+    private let apiKey = "19440141-7387445fd9a23cd1fb81f0f4b"
     
     private var baseUrlComponent: URLComponents {
         var _urlComps = URLComponents(string: "https://pixabay.com")!
@@ -21,6 +21,15 @@ class NetworkService{
             URLQueryItem(name: "key", value: apiKey)
         ]
         return _urlComps
+    }
+    
+    
+    func loadImage(from url: URL?, completion: @escaping () -> Void){
+        
+        
+        
+        
+        
     }
     
     func fetchImages(amount: Int, completion: @escaping (Result<[ ImageInfo], SessionError>) -> Void){

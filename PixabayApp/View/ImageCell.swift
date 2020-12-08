@@ -20,6 +20,5 @@ class ImageCell: UICollectionViewCell {
     func configure(with image: UIImage?){
         imageView.image = image
         
-        
     }
 }
