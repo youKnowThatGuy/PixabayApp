@@ -9,39 +9,114 @@ import UIKit
 
 class SearchViewController: UICollectionViewController {
 
+    private var images: [UIImage?] = []
+    private var imagesInfo = [ImageInfo]()
+    
+    private var activityIndicator = UIActivityIndicatorView()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        configureView()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
-        // Register cell classes
-        //self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+         //Register cell classes
+        //self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: ImageCell.identifier)
 
         // Do any additional setup after loading the view.
     }
+    
+    private func configureView(){
+        //loadImages()
+        setupSpinner(spinner: activityIndicator)
+        setupSearchBar()
+        //getCachedImages()
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
     }
-    */
+    
+    private func setupSearchBar(){
+        let searchC = UISearchController(searchResultsController: nil)
+        searchC.searchBar.placeholder = "Search"
+        searchC.searchBar.delegate = self
+        searchC.obscuresBackgroundDuringPresentation = false
+        navigationItem.searchController = searchC
+    }
+    
+    private func setupSpinner(spinner: UIActivityIndicatorView) {
+            spinner.hidesWhenStopped = true
+            spinner.style = .medium
+            spinner.color = .blue
+            spinner.frame = collectionView.bounds
+            spinner.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            collectionView.addSubview(activityIndicator)
+        }
 
+    
+    private func loadImages(query: String){
+        images.removeAll()
+        updateUI()
+        activityIndicator.startAnimating()
+        NetworkService.shared.fetchImagesForSearch(query: query ,amount: 60) { (result) in
+            self.activityIndicator.stopAnimating()
+            
+            switch result{
+            case let .failure(error):
+                print(error)
+            
+            case let .success(imagesInfo):
+                self.imagesInfo = imagesInfo
+                self.images = Array(repeating: nil, count: imagesInfo.count)
+                self.updateUI()
+            }
+        }
+    }
+    
+    
+    
+    private func updateUI(){
+        self.collectionView.reloadSections(IndexSet(arrayLiteral: 0))
+    }
+
+    private func getCachedImages(){
+        CacheManager.shared.getCachedImages { (images) in
+            self.images = images
+            self.updateUI()
+        }
+    }
+    
+    
+    private func loadSingleImage(for cell: ImageCell, at index: Int){
+        if let image = images[index]{
+            cell.configure(with: image)
+            return
+        }
+        
+        let info = imagesInfo[index]
+        NetworkService.shared.loadImage(from: info.previewURL) { (image) in
+            self.images[index] = image
+            
+            //CacheManager.shared.cacheImage(image, with: info.id)
+            cell.configure(with: self.images[index])
+        }
+    }
+
+
+    
+    
+    
+    
+    
+    
     // MARK: UICollectionViewDataSource
-
+/*
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 0
     }
-
+*/
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
-        return 0
+        return images.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -49,15 +124,41 @@ class SearchViewController: UICollectionViewController {
             fatalError("Invalid Cell kind")
         }
     
-        // Configure the cell
+        loadSingleImage(for: cell, at: indexPath.row)
     
         return cell
     }
+}
 
 
+extension SearchViewController: UISearchBarDelegate{
+    func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
+        true
+    }
     
-    private let numberOfItemsPerRow: CGFloat = 3
-    private let spacing: CGFloat = 5
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        guard let query = searchBar.text, query.count >= 4 else{
+            return
+        }
+        loadImages(query: query)
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+//-MARK: Flow layout
+private let numberOfItemsPerRow: CGFloat = 3
+private let spacing: CGFloat = 5
+
+extension SearchViewController: UICollectionViewDelegateFlowLayout{
         
         func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
             
@@ -84,6 +185,27 @@ class SearchViewController: UICollectionViewController {
         func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
             spacing
         }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // MARK: UICollectionViewDelegate
 
@@ -116,4 +238,4 @@ class SearchViewController: UICollectionViewController {
     }
     */
 
-}
+

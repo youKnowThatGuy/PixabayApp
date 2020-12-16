@@ -42,6 +42,62 @@ class NetworkService{
         }.resume()
     }
     
+    func fetchImagesForSearch(query: String ,amount: Int, completion: @escaping (Result<[ ImageInfo], SessionError>) -> Void){
+        /*
+    var urlComps = baseUrlComponent
+        urlComps.queryItems? += [
+            URLQueryItem(name: "q", value: query)
+        ]
+    fetchImages(amount: amount, completion: completion)
+         
+ */
+        var urlComps = baseUrlComponent
+        urlComps.queryItems? += [
+        URLQueryItem(name: "q", value: query),
+        URLQueryItem(name: "per_page", value: "\(amount)"),
+        URLQueryItem(name: "editors_choice", value: "\(true)")
+        ]
+        
+        guard let url = urlComps.url else {
+            DispatchQueue.main.async {
+                completion(.failure(.invalidUrl))
+            }
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                DispatchQueue.main.async {
+                    completion(.failure(.other(error)))
+                }
+                return
+            }
+            let response = response as! HTTPURLResponse
+            
+            guard let data = data, response.statusCode == 200 else {
+                DispatchQueue.main.async {
+                    completion(.failure(.serverError(response.statusCode)))
+                }
+                return
+            }
+            do {
+                let serverResponse = try JSONDecoder().decode(ServerResponse<ImageInfo>.self, from: data)
+                DispatchQueue.main.async {
+                    completion(.success(serverResponse.hits))
+                }
+            }
+            catch let decodingError{
+                DispatchQueue.main.async {
+                    completion(.failure(.decodingError(decodingError)))
+                }
+                
+            }
+            
+        }.resume()
+    }
+    
+        
+    
     func fetchImages(amount: Int, completion: @escaping (Result<[ ImageInfo], SessionError>) -> Void){
         var urlComps = baseUrlComponent
         urlComps.queryItems? += [

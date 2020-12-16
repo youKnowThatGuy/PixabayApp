@@ -1,15 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="wmV-8f-OuM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="cyq-oA-UpJ">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Editors Choice-->
+        <!--Search View Controller-->
+        <scene sceneID="eCo-FG-9K7">
+            <objects>
+                <collectionViewController id="4Wo-Qp-dJR" customClass="SearchViewController" customModule="PixabayApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="nZB-Ey-5hi">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="2rC-fh-aZV">
+                            <size key="itemSize" width="128" height="128"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ImageCell" id="U3N-C2-pnM" customClass="ImageCell" customModule="PixabayApp" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="9Gm-gl-8DJ">
+                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="KNf-UW-1Sl">
+                                            <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                        </imageView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="KNf-UW-1Sl" firstAttribute="top" secondItem="9Gm-gl-8DJ" secondAttribute="top" id="9vv-Va-j2t"/>
+                                        <constraint firstAttribute="bottom" secondItem="KNf-UW-1Sl" secondAttribute="bottom" id="PoV-5C-aFf"/>
+                                        <constraint firstAttribute="trailing" secondItem="KNf-UW-1Sl" secondAttribute="trailing" id="wba-w3-kl4"/>
+                                        <constraint firstItem="KNf-UW-1Sl" firstAttribute="leading" secondItem="9Gm-gl-8DJ" secondAttribute="leading" id="x3h-6X-wzf"/>
+                                    </constraints>
+                                </collectionViewCellContentView>
+                                <connections>
+                                    <outlet property="imageView" destination="KNf-UW-1Sl" id="v8a-kF-Rd0"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="4Wo-Qp-dJR" id="apy-u3-Xie"/>
+                            <outlet property="delegate" destination="4Wo-Qp-dJR" id="5uu-Yj-AOC"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" id="esB-Qu-Fev"/>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qQw-b1-JLP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3092.753623188406" y="-582.58928571428567"/>
+        </scene>
+        <!--Editors View Controller-->
         <scene sceneID="ZIN-da-X85">
             <objects>
                 <collectionViewController id="9Qj-Rs-lq7" customClass="EditorsViewController" customModule="PixabayApp" customModuleProvider="target" sceneMemberID="viewController">
@@ -52,88 +100,11 @@
                             <outlet property="delegate" destination="9Qj-Rs-lq7" id="Whh-UF-afc"/>
                         </connections>
                     </collectionView>
-                    <tabBarItem key="tabBarItem" title="Editors Choice" image="pencil.circle" catalog="system" id="oNz-DP-trS"/>
                     <navigationItem key="navigationItem" id="fqZ-dm-bsg"/>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JBo-TL-PYz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2184.057971014493" y="64.955357142857139"/>
-        </scene>
-        <!--Search-->
-        <scene sceneID="VFN-Px-3fJ">
-            <objects>
-                <viewController id="jKT-u4-a6c" customClass="SearchViewController" customModule="PixabayApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="UnL-Qt-D1H">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="9hB-PX-Y2n">
-                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Xis-lp-jKz">
-                                    <size key="itemSize" width="128" height="128"/>
-                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                </collectionViewFlowLayout>
-                                <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ImageCell" id="mfR-gO-kH8" customClass="ImageCell" customModule="PixabayApp" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="xT7-pO-Abn">
-                                            <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ez4-li-IjO">
-                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
-                                                </imageView>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="ez4-li-IjO" firstAttribute="leading" secondItem="xT7-pO-Abn" secondAttribute="leading" id="0dO-PD-rsF"/>
-                                                <constraint firstAttribute="trailing" secondItem="ez4-li-IjO" secondAttribute="trailing" id="CzW-N3-1Zi"/>
-                                                <constraint firstItem="ez4-li-IjO" firstAttribute="top" secondItem="xT7-pO-Abn" secondAttribute="top" id="X3J-kE-wNw"/>
-                                                <constraint firstAttribute="bottom" secondItem="ez4-li-IjO" secondAttribute="bottom" id="jfI-Tf-LKL"/>
-                                            </constraints>
-                                        </collectionViewCellContentView>
-                                        <connections>
-                                            <outlet property="imageView" destination="ez4-li-IjO" id="sqj-fd-zgg"/>
-                                        </connections>
-                                    </collectionViewCell>
-                                </cells>
-                            </collectionView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="s0B-Gm-z9w"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="9hB-PX-Y2n" firstAttribute="top" secondItem="s0B-Gm-z9w" secondAttribute="top" id="F8f-cU-83C"/>
-                            <constraint firstItem="9hB-PX-Y2n" firstAttribute="leading" secondItem="s0B-Gm-z9w" secondAttribute="leading" id="QSx-X8-ycv"/>
-                            <constraint firstItem="9hB-PX-Y2n" firstAttribute="bottom" secondItem="s0B-Gm-z9w" secondAttribute="bottom" id="diF-lI-zTV"/>
-                            <constraint firstItem="9hB-PX-Y2n" firstAttribute="trailing" secondItem="s0B-Gm-z9w" secondAttribute="trailing" id="k3V-B7-Frs"/>
-                        </constraints>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Search" image="magnifyingglass" catalog="system" id="Bj4-8a-jbq"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="SLv-ud-mpu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2182.608695652174" y="-599.33035714285711"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="L4f-Bp-el8">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="wmV-8f-OuM" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="XSO-gU-6fC">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="cyq-oA-UpJ" kind="relationship" relationship="rootViewController" id="vf1-Ef-vhs"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="agB-K7-ATY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="363.768115942029" y="64.955357142857139"/>
+            <point key="canvasLocation" x="3094.202898550725" y="64.955357142857139"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="CYq-Iz-txW">
@@ -147,13 +118,51 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
-                        <segue destination="9Qj-Rs-lq7" kind="relationship" relationship="viewControllers" id="Tor-ry-eh3"/>
-                        <segue destination="jKT-u4-a6c" kind="relationship" relationship="viewControllers" id="wKk-wz-Ehm"/>
+                        <segue destination="dnO-Ok-SnA" kind="relationship" relationship="viewControllers" id="Tor-ry-eh3"/>
+                        <segue destination="sq0-Ji-hm4" kind="relationship" relationship="viewControllers" id="zbN-58-g1f"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KVQ-PF-sPW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1273.913043478261" y="64.955357142857139"/>
+        </scene>
+        <!--Search-->
+        <scene sceneID="5vU-RF-je1">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="sq0-Ji-hm4" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Search" image="magnifyingglass" catalog="system" id="tZF-1a-oDB"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="qFH-h3-hwt">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="4Wo-Qp-dJR" kind="relationship" relationship="rootViewController" id="W0p-Vb-ZSz"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="T6i-Yh-gJx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2182.608695652174" y="-582.58928571428567"/>
+        </scene>
+        <!--Editors Choice-->
+        <scene sceneID="l9J-Dq-cZO">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="dnO-Ok-SnA" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Editors Choice" image="pencil.circle" catalog="system" id="oNz-DP-trS"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="faW-pu-4MV">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="9Qj-Rs-lq7" kind="relationship" relationship="rootViewController" id="dpa-TC-9PK"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CLt-i3-4mb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2184.057971014493" y="64.955357142857139"/>
         </scene>
     </scenes>
     <resources>
