@@ -45,11 +45,15 @@ class CacheManager{
         }
     }
     
+    
+    
     func getImage(with id: Int, completion: (UIImage?) -> Void){
         let imageUrl = getCachesDirectory().appendingPathComponent("\(id).png")
         let image = getImage(from: imageUrl.path)
         completion(image)
     }
+    
+    
     
     func getImage(from path: String)-> UIImage?{
         print(path)
@@ -59,7 +63,9 @@ class CacheManager{
         }
         return nil
     }
-    func getCachedImages(comletion: ([UIImage])-> Void){
+    
+    
+    func getCachedImages(completion: ([UIImage])-> Void){
         var images = [UIImage]()
         let imagePaths = getCachedImagePaths()
         for path in imagePaths{
@@ -67,8 +73,10 @@ class CacheManager{
                 images.append(image)
             }
         }
-        comletion(images)
+        completion(images)
     }
+    
+    
     
     func tryDeleteImage(path: String)-> Bool{
         do{
@@ -80,6 +88,8 @@ class CacheManager{
         }
     }
     
+    
+    
     private func getCachedImagePaths()-> [String]{
         do{
             let paths = try fileManager.contentsOfDirectory(atPath: getCachesDirectory().path)
@@ -89,6 +99,8 @@ class CacheManager{
             return []
         }
     }
+    
+    
         
         private func getCachesDirectory()-> URL{
             let url = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("CachedImages")

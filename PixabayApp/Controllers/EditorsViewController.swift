@@ -11,10 +11,12 @@ class EditorsViewController: UICollectionViewController {
     
     private var images: [UIImage?] = []
     private var imagesInfo = [ImageInfo]()
+    
+    private var activityIndicator = UIActivityIndicatorView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadImages()
+        configureView()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -24,9 +26,30 @@ class EditorsViewController: UICollectionViewController {
         // Do any additional setup after loading the view.
     }
     
+    private func configureView(){
+        loadImages()
+        getCachedImages()
+        setupSpinner(spinner: activityIndicator)
+        
+    }
+    
+    private func setupSpinner(spinner: UIActivityIndicatorView) {
+            spinner.hidesWhenStopped = true
+            spinner.style = .medium
+            spinner.color = .blue
+            spinner.frame = collectionView.bounds
+            spinner.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            collectionView.addSubview(activityIndicator)
+        }
+
     
     private func loadImages(){
+        //images.removeAll()
+        updateUI()
+        activityIndicator.startAnimating()
         NetworkService.shared.fetchImages(amount: 60) { (result) in
+            self.activityIndicator.stopAnimating()
+            
             switch result{
             case let .failure(error):
                 print(error)
@@ -34,23 +57,42 @@ class EditorsViewController: UICollectionViewController {
             case let .success(imagesInfo):
                 self.imagesInfo = imagesInfo
                 self.images = Array(repeating: nil, count: imagesInfo.count)
-                self.collectionView.reloadData()
+                self.updateUI()
             }
         }
     }
+    
+    
+    
+    private func updateUI(){
+        self.collectionView.reloadSections(IndexSet(arrayLiteral: 0))
+    }
 
+    private func getCachedImages(){
+        CacheManager.shared.getCachedImages { (images) in
+            self.images = images
+            self.updateUI()
+        }
+    }
+    
+    
     private func loadSingleImage(for cell: ImageCell, at index: Int){
-        let info = imagesInfo[index]
         if let image = images[index]{
             cell.configure(with: image)
             return
         }
+        
+        let info = imagesInfo[index]
         NetworkService.shared.loadImage(from: info.previewURL) { (image) in
             self.images[index] = image
+            
+            CacheManager.shared.cacheImage(image, with: info.id)
             cell.configure(with: self.images[index])
         }
     }
 
+    
+    
     
     
     
@@ -61,9 +103,8 @@ class EditorsViewController: UICollectionViewController {
         return 0
     }
 */
-
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return imagesInfo.count
+        return images.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -75,6 +116,10 @@ class EditorsViewController: UICollectionViewController {
         return cell
     }
 }
+
+
+
+
 
 private let numberOfItemsPerRow: CGFloat = 3
 private let spacing: CGFloat = 5
