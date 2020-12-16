@@ -42,67 +42,41 @@ class NetworkService{
         }.resume()
     }
     
-    func fetchImagesForSearch(query: String ,amount: Int, completion: @escaping (Result<[ ImageInfo], SessionError>) -> Void){
-        /*
-    var urlComps = baseUrlComponent
-        urlComps.queryItems? += [
-            URLQueryItem(name: "q", value: query)
-        ]
-    fetchImages(amount: amount, completion: completion)
-         
- */
-        var urlComps = baseUrlComponent
-        urlComps.queryItems? += [
-        URLQueryItem(name: "q", value: query),
-        URLQueryItem(name: "per_page", value: "\(amount)"),
-        URLQueryItem(name: "editors_choice", value: "\(true)")
-        ]
+    func fetchImagesForSearch(query: String ,amount: Int, filter: Bool, completion: @escaping (Result<[ ImageInfo], SessionError>) -> Void){
         
-        guard let url = urlComps.url else {
-            DispatchQueue.main.async {
-                completion(.failure(.invalidUrl))
-            }
-            return
+    var urlComps = baseUrlComponent
+        var netOrder = "latest"
+        if !filter{
+            netOrder = "popular"
         }
         
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            if let error = error {
-                DispatchQueue.main.async {
-                    completion(.failure(.other(error)))
-                }
-                return
-            }
-            let response = response as! HTTPURLResponse
-            
-            guard let data = data, response.statusCode == 200 else {
-                DispatchQueue.main.async {
-                    completion(.failure(.serverError(response.statusCode)))
-                }
-                return
-            }
-            do {
-                let serverResponse = try JSONDecoder().decode(ServerResponse<ImageInfo>.self, from: data)
-                DispatchQueue.main.async {
-                    completion(.success(serverResponse.hits))
-                }
-            }
-            catch let decodingError{
-                DispatchQueue.main.async {
-                    completion(.failure(.decodingError(decodingError)))
-                }
-                
-            }
-            
-        }.resume()
+        urlComps.queryItems? += [
+            URLQueryItem(name: "q", value: query),
+            URLQueryItem(name: "order", value: netOrder)
+        ]
+        fetchImages(urlCompsDefault: urlComps, amount: amount, completion: completion)
+         
     }
+      
     
-        
-    
-    func fetchImages(amount: Int, completion: @escaping (Result<[ ImageInfo], SessionError>) -> Void){
+    func fetchEditorsImages(amount: Int, completion: @escaping (Result<[ ImageInfo], SessionError>) -> Void){
         var urlComps = baseUrlComponent
         urlComps.queryItems? += [
+            URLQueryItem(name: "editors_choice", value: "\(true)")
+        ]
+        fetchImages(urlCompsDefault: urlComps, amount: amount, completion: completion)
+        
+    }
+ 
+    
+    
+    
+    
+    
+    func fetchImages(urlCompsDefault: URLComponents, amount: Int, completion: @escaping (Result<[ ImageInfo], SessionError>) -> Void){
+        var urlComps = urlCompsDefault
+        urlComps.queryItems? += [
         URLQueryItem(name: "per_page", value: "\(amount)"),
-        URLQueryItem(name: "editors_choice", value: "\(true)")
         ]
         
         guard let url = urlComps.url else {
@@ -144,3 +118,4 @@ class NetworkService{
     }
     
 }
+

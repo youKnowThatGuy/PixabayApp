@@ -30,6 +30,8 @@ class EditorsViewController: UICollectionViewController {
         loadImages()
         getCachedImages()
         setupSpinner(spinner: activityIndicator)
+        let logoImage = UIImage(named: "logo")!
+        self.navigationItem.titleView = UIImageView(image: logoImage)
         
     }
     
@@ -47,7 +49,7 @@ class EditorsViewController: UICollectionViewController {
         //images.removeAll()
         updateUI()
         activityIndicator.startAnimating()
-        NetworkService.shared.fetchImages(amount: 60) { (result) in
+        NetworkService.shared.fetchEditorsImages(amount: 60) { (result) in
             self.activityIndicator.stopAnimating()
             
             switch result{

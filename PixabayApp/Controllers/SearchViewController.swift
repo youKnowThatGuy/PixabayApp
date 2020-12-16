@@ -9,8 +9,12 @@ import UIKit
 
 class SearchViewController: UICollectionViewController {
 
+    @IBOutlet weak var searchSwitch: UISegmentedControl!
+    private var searchFilter = false
+    
     private var images: [UIImage?] = []
     private var imagesInfo = [ImageInfo]()
+    
     
     private var activityIndicator = UIActivityIndicatorView()
 
@@ -27,7 +31,6 @@ class SearchViewController: UICollectionViewController {
     }
     
     private func configureView(){
-        //loadImages()
         setupSpinner(spinner: activityIndicator)
         setupSearchBar()
         //getCachedImages()
@@ -40,6 +43,17 @@ class SearchViewController: UICollectionViewController {
         searchC.searchBar.delegate = self
         searchC.obscuresBackgroundDuringPresentation = false
         navigationItem.searchController = searchC
+    }
+    
+    func choiceCheck(){
+        switch searchSwitch.selectedSegmentIndex {
+        case 0:
+            searchFilter = false
+        case 1:
+            searchFilter = true
+        default:
+            searchFilter = false
+        }
     }
     
     private func setupSpinner(spinner: UIActivityIndicatorView) {
@@ -56,7 +70,7 @@ class SearchViewController: UICollectionViewController {
         images.removeAll()
         updateUI()
         activityIndicator.startAnimating()
-        NetworkService.shared.fetchImagesForSearch(query: query ,amount: 60) { (result) in
+        NetworkService.shared.fetchImagesForSearch(query: query ,amount: 60, filter: searchFilter) { (result) in
             self.activityIndicator.stopAnimating()
             
             switch result{
@@ -74,6 +88,7 @@ class SearchViewController: UICollectionViewController {
     
     
     private func updateUI(){
+        choiceCheck()
         self.collectionView.reloadSections(IndexSet(arrayLiteral: 0))
     }
 
@@ -95,7 +110,7 @@ class SearchViewController: UICollectionViewController {
         NetworkService.shared.loadImage(from: info.previewURL) { (image) in
             self.images[index] = image
             
-            //CacheManager.shared.cacheImage(image, with: info.id)
+            CacheManager.shared.cacheImage(image, with: info.id)
             cell.configure(with: self.images[index])
         }
     }
