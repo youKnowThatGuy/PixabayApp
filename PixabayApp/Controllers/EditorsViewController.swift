@@ -49,7 +49,7 @@ class EditorsViewController: UICollectionViewController {
         //images.removeAll()
         updateUI()
         activityIndicator.startAnimating()
-        NetworkService.shared.fetchEditorsImages(amount: 60) { (result) in
+        NetworkService.shared.fetchEditorsImages(amount: 70) { (result) in
             self.activityIndicator.stopAnimating()
             
             switch result{

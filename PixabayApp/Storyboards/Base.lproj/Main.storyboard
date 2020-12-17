@@ -53,7 +53,7 @@
                     </collectionView>
                     <navigationItem key="navigationItem" id="esB-Qu-Fev">
                         <nil key="title"/>
-                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="Wih-8h-IhS">
+                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="Wih-8h-IhS">
                             <rect key="frame" x="140.5" y="5.5" width="133" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <segments>
@@ -62,6 +62,9 @@
                             </segments>
                         </segmentedControl>
                     </navigationItem>
+                    <connections>
+                        <outlet property="searchSwitch" destination="Wih-8h-IhS" id="BEc-pW-XJy"/>
+                    </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qQw-b1-JLP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

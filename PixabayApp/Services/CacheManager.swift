@@ -16,6 +16,8 @@ class CacheManager{
     private let fileManager = FileManager.default
     
     func cacheImage(_ image: UIImage?, with id: Int, completion: ((Bool)-> Void)? = nil){
+        DispatchQueue.global(qos: .utility).async { [self] in
+        
         guard let image = image,
               let data = image.pngData() else{
             completion?(false)
@@ -43,20 +45,26 @@ class CacheManager{
             print(error)
             completion?(false)
         }
+        }
     }
     
     
     
-    func getImage(with id: Int, completion: (UIImage?) -> Void){
+    func getImage(with id: Int, completion: @escaping (UIImage?) -> Void){
         let imageUrl = getCachesDirectory().appendingPathComponent("\(id).png")
-        let image = getImage(from: imageUrl.path)
+        DispatchQueue.global(qos: .userInteractive).async {
+            
+            let image = self.getImage(from: imageUrl.path)
+            DispatchQueue.main.async {
         completion(image)
+            }
+        }
     }
     
     
     
     func getImage(from path: String)-> UIImage?{
-        print(path)
+        //print(path)
         if let data = fileManager.contents(atPath: path),
            let image = UIImage(data: data){
             return image
@@ -65,7 +73,9 @@ class CacheManager{
     }
     
     
-    func getCachedImages(completion: ([UIImage])-> Void){
+    func getCachedImages(completion: @escaping ([UIImage])-> Void){
+        DispatchQueue.global().async { [self] in
+            
         var images = [UIImage]()
         let imagePaths = getCachedImagePaths()
         for path in imagePaths{
@@ -73,7 +83,10 @@ class CacheManager{
                 images.append(image)
             }
         }
-        completion(images)
+            DispatchQueue.main.async {
+            completion(images)
+            }
+        }
     }
     
     

@@ -70,7 +70,7 @@ class SearchViewController: UICollectionViewController {
         images.removeAll()
         updateUI()
         activityIndicator.startAnimating()
-        NetworkService.shared.fetchImagesForSearch(query: query ,amount: 60, filter: searchFilter) { (result) in
+        NetworkService.shared.fetchImagesForSearch(query: query ,amount: 70, filter: searchFilter) { (result) in
             self.activityIndicator.stopAnimating()
             
             switch result{
