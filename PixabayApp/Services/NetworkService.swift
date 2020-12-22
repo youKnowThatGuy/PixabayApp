@@ -73,7 +73,7 @@ class NetworkService{
     
     
     
-    func fetchImages(urlCompsDefault: URLComponents, amount: Int, completion: @escaping (Result<[ ImageInfo], SessionError>) -> Void){
+    private func fetchImages(urlCompsDefault: URLComponents, amount: Int, completion: @escaping (Result<[ ImageInfo], SessionError>) -> Void){
         var urlComps = urlCompsDefault
         urlComps.queryItems? += [
         URLQueryItem(name: "per_page", value: "\(amount)"),
