@@ -96,6 +96,21 @@ class EditorsViewController: UICollectionViewController {
     
     
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier{
+        case "showEditorsImage":
+            guard let vc = segue.destination as? ImageDetailViewController,
+                  let image = sender as? ImageInfo
+            else {fatalError("Invalid data passed")}
+            vc.imageInfo = image
+            
+        default:
+            break
+        }
+    }
+    
+    
+    
     
     
     // MARK: DataSource
@@ -117,6 +132,12 @@ class EditorsViewController: UICollectionViewController {
     
         return cell
     }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedImage = imagesInfo[indexPath.row]
+        performSegue(withIdentifier: "showEditorsImage", sender: selectedImage)
+    }
+    
 }
 
 

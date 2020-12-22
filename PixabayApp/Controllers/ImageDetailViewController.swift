@@ -20,9 +20,14 @@ class ImageDetailViewController: UIViewController {
     @IBOutlet weak var authorAvatarView: UIImageView!
     
     var imageInfo: ImageInfo!
+    let tapReact = UITapGestureRecognizer()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tapReact.addTarget(self, action: #selector(imageTapped) )
+        fullImageView.addGestureRecognizer(tapReact)
+        
         prepareView()
         // Do any additional setup after loading the view.
     }
@@ -32,7 +37,7 @@ class ImageDetailViewController: UIViewController {
         likesLabel.text = "\(imageInfo.likes)"
         commentsLabel.text = "\(imageInfo.comments)"
         viewsLabel.text = "\(imageInfo.views)"
-        authorNameLabel.text = "\(imageInfo.user)"
+        authorNameLabel.text = "commited by: \(imageInfo.user)"
         loadImages()
         
     }
@@ -47,6 +52,22 @@ class ImageDetailViewController: UIViewController {
             self.authorAvatarView.image = image
         }
     
+    }
+    
+    @objc func imageTapped() {
+        performSegue(withIdentifier: "photoZoom", sender: fullImageView.image)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier{
+        case "photoZoom":
+            guard let vc = segue.destination as? ImageZoomViewController,
+                  let image = sender as? UIImage
+            else {fatalError("invalid data passed")}
+            vc.image = image
+        default:
+            break
+        }
     }
     
 

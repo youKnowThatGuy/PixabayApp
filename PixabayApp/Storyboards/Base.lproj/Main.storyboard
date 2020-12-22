@@ -111,17 +111,10 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="eye.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="2io-Dw-2y1">
-                                                <rect key="frame" x="293" y="281" width="29" height="29"/>
+                                                <rect key="frame" x="273" y="281" width="29" height="29"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <color key="tintColor" systemColor="systemGrayColor"/>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eL5-hT-sW3">
-                                                <rect key="frame" x="339" y="285" width="42" height="21"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ya7-ut-bBu">
                                                 <rect key="frame" x="17" y="394" width="110" height="21"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -130,13 +123,20 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q7P-3l-4DE">
-                                                <rect key="frame" x="196" y="374" width="62" height="61"/>
+                                                <rect key="frame" x="147" y="374" width="100" height="89"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             </imageView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eL5-hT-sW3">
+                                                <rect key="frame" x="310" y="285" width="90" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     </view>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kVJ-ne-7Bl">
+                                    <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kVJ-ne-7Bl">
                                         <rect key="frame" x="20" y="27" width="374" height="191"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="191" id="uZ3-6g-Beh"/>
@@ -175,11 +175,28 @@
                         <outlet property="fullImageView" destination="kVJ-ne-7Bl" id="Cyp-03-rRc"/>
                         <outlet property="likesLabel" destination="Qkc-Vb-OBr" id="js8-de-RhA"/>
                         <outlet property="viewsLabel" destination="eL5-hT-sW3" id="bfl-Fa-HSz"/>
+                        <segue destination="HeA-xT-Kro" kind="show" identifier="photoZoom" id="fdA-WY-hgV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="F6v-Yg-OH7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4398.5507246376819" y="-377.00892857142856"/>
+            <point key="canvasLocation" x="4692.753623188406" y="-246.42857142857142"/>
+        </scene>
+        <!--Image Zoom View Controller-->
+        <scene sceneID="uhn-yO-If6">
+            <objects>
+                <viewController id="HeA-xT-Kro" customClass="ImageZoomViewController" customModule="PixabayApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="EVd-K0-Y2h">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="yTz-np-pdh"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="eou-bd-DIh"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XNP-pp-w9Y" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5611.594202898551" y="-246.42857142857142"/>
         </scene>
         <!--Editors View Controller-->
         <scene sceneID="ZIN-da-X85">
@@ -225,6 +242,9 @@
                         </connections>
                     </collectionView>
                     <navigationItem key="navigationItem" id="fqZ-dm-bsg"/>
+                    <connections>
+                        <segue destination="igo-Je-InV" kind="show" identifier="showEditorsImage" id="lb8-TI-3QV"/>
+                    </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JBo-TL-PYz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -289,6 +309,9 @@
             <point key="canvasLocation" x="2184.057971014493" y="64.955357142857139"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="lb8-TI-3QV"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="eye.fill" catalog="system" width="128" height="78"/>
         <image name="heart.fill" catalog="system" width="128" height="109"/>
