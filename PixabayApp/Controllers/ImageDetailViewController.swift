@@ -18,6 +18,7 @@ class ImageDetailViewController: UIViewController {
     
     @IBOutlet weak var authorNameLabel: UILabel!
     @IBOutlet weak var authorAvatarView: UIImageView!
+    @IBOutlet weak var tagsLabel: UILabel!
     
     var imageInfo: ImageInfo!
     let tapReact = UITapGestureRecognizer()
@@ -32,12 +33,17 @@ class ImageDetailViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    
     
     private func prepareView(){
         likesLabel.text = "\(imageInfo.likes)"
         commentsLabel.text = "\(imageInfo.comments)"
         viewsLabel.text = "\(imageInfo.views)"
         authorNameLabel.text = "commited by: \(imageInfo.user)"
+        tagsLabel.text = "tags: \(imageInfo.tags)"
         loadImages()
         
     }
@@ -71,14 +77,6 @@ class ImageDetailViewController: UIViewController {
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
+    
 
 }
