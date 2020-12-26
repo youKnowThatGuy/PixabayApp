@@ -10,10 +10,10 @@ import UIKit
 class ImageZoomViewController: UIViewController {
     
     var imageScrollView: ImageScrollView!
-    
-    //@IBOutlet weak var fullSizeImageView: UIImageView!
-    
+
     var image: UIImage!
+    
+    private var savingImageisFinished = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +33,7 @@ class ImageZoomViewController: UIViewController {
         imageScrollView.isUserInteractionEnabled = true
         
         let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(imageTapped))
-        longPressRecognizer.minimumPressDuration = 0.5
+        longPressRecognizer.minimumPressDuration = 1.0
         imageScrollView.addGestureRecognizer(longPressRecognizer)
         
     }
@@ -42,11 +42,14 @@ class ImageZoomViewController: UIViewController {
     
     //-MARK: image saving func
     @objc func imageTapped(sender: UILongPressGestureRecognizer){
-        UIImageWriteToSavedPhotosAlbum(imageScrollView.imageZoomView.image!, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
         
+        if (!savingImageisFinished){
+        UIImageWriteToSavedPhotosAlbum(image, self, #selector(saveImage(_:didFinishSavingWithError:contextInfo:)), nil)
+        savingImageisFinished = true
+        }
     }
     
-    @objc func image (_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+    @objc func saveImage (_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
         if let error = error {
             // we got back an error!
             let ac = UIAlertController(title: "Save error", message: error.localizedDescription, preferredStyle: .alert)
@@ -54,7 +57,12 @@ class ImageZoomViewController: UIViewController {
             present(ac, animated: true)
         } else {
             let ac = UIAlertController(title: "Saved!", message: "Image has been saved to library.", preferredStyle: .actionSheet)
-            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            
+            let button = UIAlertAction(title: "OK", style: .default) { (action) in
+                self.savingImageisFinished = false
+            }
+            
+            ac.addAction(button)
             present(ac, animated: true)
         }
     }

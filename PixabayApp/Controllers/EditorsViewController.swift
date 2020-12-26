@@ -26,9 +26,11 @@ class EditorsViewController: UICollectionViewController {
         // Do any additional setup after loading the view.
     }
     
+    
     private func configureView(){
+        collectionView.collectionViewLayout = customLayout()
+        //getCachedImages()
         loadImages()
-        getCachedImages()
         setupSpinner(spinner: activityIndicator)
         let logoImage = UIImage(named: "logo")!
         self.navigationItem.titleView = UIImageView(image: logoImage)
@@ -49,7 +51,7 @@ class EditorsViewController: UICollectionViewController {
         //images.removeAll()
         updateUI()
         activityIndicator.startAnimating()
-        NetworkService.shared.fetchEditorsImages(amount: 70) { (result) in
+        NetworkService.shared.fetchEditorsImages(amount: 87) { (result) in
             self.activityIndicator.stopAnimating()
             
             switch result{
@@ -73,23 +75,27 @@ class EditorsViewController: UICollectionViewController {
     private func getCachedImages(){
         CacheManager.shared.getCachedImages { (images) in
             self.images = images
-            self.updateUI()
         }
     }
     
-    
-    private func loadSingleImage(for cell: ImageCell, at index: Int){
-        if let image = images[index]{
-            cell.configure(with: image)
-            return
-        }
-        
+    private func loadSingleImage(for cell: ImageCell,at index: Int){
         let info = imagesInfo[index]
+        
+        CacheManager.shared.getImage(with: info.id) { (image) in
+            if (image != nil){
+                //cell.configure(with: image)
+                self.images.append(image)
+                return
+            }
+        }
+ 
+        
         NetworkService.shared.loadImage(from: info.previewURL) { (image) in
             self.images[index] = image
-            
+            self.images.append(image)
             CacheManager.shared.cacheImage(image, with: info.id)
             cell.configure(with: self.images[index])
+            //self.images.append(image)
         }
     }
 
@@ -112,9 +118,9 @@ class EditorsViewController: UICollectionViewController {
     
     
     private let numberOfItemsPerRow: CGFloat = 3
-    private let spacing: CGFloat = 5
+    private let spacing: CGFloat = 2
     
-    
+    /*
     private func prepareLayout(){
         let width = view.bounds.width
         let summarySpacing = spacing * (numberOfItemsPerRow - 1)
@@ -128,7 +134,98 @@ class EditorsViewController: UICollectionViewController {
         collectionView.collectionViewLayout = StandartLayout(itemSize: itemSize, insetForSection: UIEdgeInsets(top: spacing, left: spacing, bottom: spacing, right: spacing), lineSpacing: spacing, interItemSpacing: spacing)
         
     }
+    */
     
+    
+    //MARK: custom layout
+    private func customLayout()-> UICollectionViewLayout{
+        //first layer
+        /*
+        let fullImageItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalWidth(2/3)))
+        fullImageItem.contentInsets = NSDirectionalEdgeInsets(top: spacing, leading: spacing, bottom: spacing, trailing: spacing)
+ */
+        
+        //second layer
+        let mainItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(2/3), heightDimension: .fractionalHeight(1.0)))
+        mainItem.contentInsets = NSDirectionalEdgeInsets(top: spacing, leading: spacing, bottom: spacing, trailing: spacing)
+        
+        let pairItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(0.5)))
+        pairItem.contentInsets = NSDirectionalEdgeInsets(top: spacing, leading: spacing, bottom: spacing, trailing: spacing)
+        
+        let trailingGroup = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3), heightDimension: .fractionalHeight(1.0)), subitem: pairItem, count: 2)
+        
+        let mainWithPairGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(4/9)), subitems: [mainItem, trailingGroup])
+        
+        //third layer
+        let tripletItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/4), heightDimension: .fractionalHeight(1.0)))
+        tripletItem.contentInsets = NSDirectionalEdgeInsets(top: spacing, leading: spacing, bottom: spacing, trailing: spacing)
+        
+        let tripletGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(2/9)), subitems: [tripletItem, tripletItem, tripletItem, tripletItem])
+        
+        //fourth layer
+        let mainWithPairReverse = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(4/9)), subitems: [trailingGroup, mainItem])
+        
+        //final preparations
+        
+        let nestedGroup = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(10/9)), subitems: [
+            
+            mainWithPairGroup,
+            tripletGroup,
+            mainWithPairReverse
+        ])
+        
+        let section = NSCollectionLayoutSection(group: nestedGroup)
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        return layout
+    }
+    
+    
+    private func sortForLayout(completion: @escaping ([UIImage?])-> Void){
+        DispatchQueue.global().async { [self] in
+        var imagesCopy = images
+            
+        var flag = true
+        var longImages: [UIImage?] = []
+        
+        var start = 0
+        
+        while (flag){
+        for k in start..<imagesCopy.count{
+            if (imagesCopy[k]!.size.width < imagesCopy[k]!.size.height){
+                longImages.append(imagesCopy[k])
+                imagesCopy.remove(at: k)
+                start = k
+                break
+            }
+            if (k == imagesCopy.count - 1){
+                flag = false
+            }
+        }
+        }
+        
+        var index = 4
+        var countOfItems = 0
+        
+        for image in longImages{
+            if(countOfItems < 3 && index <= imagesCopy.count){
+            imagesCopy.insert(image, at: index)
+            index += 1
+            countOfItems += 1
+            }
+            else{
+                index += 7
+                countOfItems = 0
+            }
+        }
+        
+        
+        DispatchQueue.main.async {
+            completion(imagesCopy)
+        }
+        }
+        
+    }
     
     
     
@@ -149,6 +246,7 @@ class EditorsViewController: UICollectionViewController {
             fatalError("Invalid Cell kind")
         }
         loadSingleImage(for: cell, at: indexPath.row)
+        //cell.configure(with: images[indexPath.row])
     
         return cell
     }

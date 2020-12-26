@@ -21,13 +21,7 @@ class SearchViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-         //Register cell classes
-        //self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: ImageCell.identifier)
-
-        // Do any additional setup after loading the view.
+        
     }
     
     private func configureView(){
