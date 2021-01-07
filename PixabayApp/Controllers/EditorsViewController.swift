@@ -17,13 +17,6 @@ class EditorsViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-         //Register cell classes
-        //self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: ImageCell.identifier)
-
-        // Do any additional setup after loading the view.
     }
     
     
@@ -114,7 +107,6 @@ class EditorsViewController: UICollectionViewController {
     
     
     
-    private let numberOfItemsPerRow: CGFloat = 3
     private let spacing: CGFloat = 1
     
     /*
@@ -178,52 +170,8 @@ class EditorsViewController: UICollectionViewController {
         return layout
     }
     
+        
     
-    private func sortForLayout(completion: @escaping ([UIImage?])-> Void){
-        DispatchQueue.global().async { [self] in
-        var imagesCopy = images
-            
-        var flag = true
-        var longImages: [UIImage?] = []
-        
-        var start = 0
-        
-        while (flag){
-        for k in start..<imagesCopy.count{
-            if (imagesCopy[k]!.size.width < imagesCopy[k]!.size.height){
-                longImages.append(imagesCopy[k])
-                imagesCopy.remove(at: k)
-                start = k
-                break
-            }
-            if (k == imagesCopy.count - 1){
-                flag = false
-            }
-        }
-        }
-        
-        var index = 4
-        var countOfItems = 0
-        
-        for image in longImages{
-            if(countOfItems < 3 && index <= imagesCopy.count){
-            imagesCopy.insert(image, at: index)
-            index += 1
-            countOfItems += 1
-            }
-            else{
-                index += 7
-                countOfItems = 0
-            }
-        }
-        
-        
-        DispatchQueue.main.async {
-            completion(imagesCopy)
-        }
-        }
-        
-    }
     
     
     

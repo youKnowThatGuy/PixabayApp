@@ -15,6 +15,10 @@ class NetworkService{
     
     private let apiKey = "19440141-7387445fd9a23cd1fb81f0f4b"
     
+    private let numberOfVerticalImages = 10
+    
+    
+    
     private var baseUrlComponent: URLComponents {
         var _urlComps = URLComponents(string: "https://pixabay.com")!
         _urlComps.path = "/api"
@@ -68,10 +72,10 @@ class NetworkService{
             URLQueryItem(name: "editors_choice", value: "\(true)"),
             URLQueryItem(name: "orientation", value: "horizontal")
         ]
-        fetchImages(urlCompsDefault: urlComps, amount: amount - 4) {(result) in
+        fetchImages(urlCompsDefault: urlComps, amount: amount - numberOfVerticalImages) {(result) in
             switch result{
             case let .failure(error):
-                print(error)
+                completion(.failure(error))
                 
             
             case let .success(imagesInfo):
@@ -79,44 +83,28 @@ class NetworkService{
                 urlComps.queryItems?.removeLast()
                 urlComps.queryItems? += [URLQueryItem(name: "orientation", value: "vertical"),
                 URLQueryItem(name: "min_height", value: "\(100)")]
-                self.fetchImages(urlCompsDefault: urlComps, amount: 4) {(result) in
+                self.fetchImages(urlCompsDefault: urlComps, amount: self.numberOfVerticalImages) {(result) in
                     switch result{
                     case let .failure(error):
-                        print(error)
+                        completion(.failure(error))
                     
                     case let .success(imagesInfo):
                         imagesInfoVer = imagesInfo
-                        imagesInfoHor.insert(imagesInfoVer[0], at: 0)
+                        var count = 0
+                        for imageInfo in imagesInfoVer {
+                            imagesInfoHor.insert(imageInfo, at: count)
+                            count += 9
+                        }
+                        //imagesInfoHor.insert(imagesInfoVer[0], at: 0)
                         DispatchQueue.main.async {
                             completion(.success(imagesInfoHor))
                         }
                     }
                 }
-                /*
-                imagesInfoHor.insert(imagesInfoVer[0], at: 1)
-                imagesInfoHor.insert(imagesInfoVer[1], at: 4)
-                imagesInfoHor.insert(imagesInfoVer[2], at: 5)
-                imagesInfoHor.insert(imagesInfoVer[3], at: 6)
-                DispatchQueue.main.async {
-                    completion(.success(imagesInfoHor))
-                }
- */
+              
+
             }
         }
-        /*
-        urlComps.queryItems?.removeLast()
-        urlComps.queryItems? += [URLQueryItem(name: "orientation", value: "vertical"),
-        URLQueryItem(name: "min_height", value: "\(10)")]
-        fetchImages(urlCompsDefault: urlComps, amount: 4) {(result) in
-            switch result{
-            case let .failure(error):
-                print(error)
-            
-            case let .success(imagesInfo):
-                imagesInfoVer = imagesInfo
-            }
-        }
-           */
         
         }
         

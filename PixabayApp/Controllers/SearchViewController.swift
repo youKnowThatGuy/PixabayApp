@@ -25,6 +25,7 @@ class SearchViewController: UICollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        prepareLayout()
         loadRecentSearch()
         configureView()
         
@@ -106,6 +107,33 @@ class SearchViewController: UICollectionViewController {
         choiceCheck()
         self.collectionView.reloadSections(IndexSet(arrayLiteral: 0))
     }
+    
+    
+    
+    
+    
+    //-MARK: fLOW LAYOUT
+    
+    private let numberOfItemsPerRow: CGFloat = 3
+    private let spacing: CGFloat = 5
+    private func prepareLayout(){
+        let width = view.bounds.width
+        let summarySpacing = spacing * (numberOfItemsPerRow - 1)
+        let insets = 2  * spacing
+        let rawWidth = width - summarySpacing - insets
+        
+        let cellWidth = rawWidth / numberOfItemsPerRow
+        
+        let itemSize = CGSize(width: cellWidth, height: cellWidth)
+        
+        collectionView.collectionViewLayout = StandartLayout(itemSize: itemSize, insetForSection: UIEdgeInsets(top: spacing, left: spacing, bottom: spacing, right: spacing), lineSpacing: spacing, interItemSpacing: spacing)
+        
+    }
+    
+    
+    
+    
+    
     
     
     private func loadSingleImage(for cell: ImageCell, at index: Int){
@@ -238,45 +266,6 @@ extension SearchViewController: SuggestedSearch {
 }
 
 
-
-
-
-
-
-
-
-//-MARK: Flow layout
-private let numberOfItemsPerRow: CGFloat = 3
-private let spacing: CGFloat = 5
-
-extension SearchViewController: UICollectionViewDelegateFlowLayout{
-        
-        func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-            
-            let width = view.bounds.width
-            let summarySpacing = spacing * (numberOfItemsPerRow - 1)
-            let insets = 2  * spacing
-            let rawWidth = width - summarySpacing - insets
-            
-            let cellWidth = rawWidth / numberOfItemsPerRow
-            
-            return CGSize(width: cellWidth, height: cellWidth)
-            
-        }
-        
-        func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-            
-            UIEdgeInsets(top: spacing, left: spacing, bottom: spacing, right: spacing)
-        }
-        
-        func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-            spacing
-        }
-        
-        func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-            spacing
-        }
-}
 
 
 

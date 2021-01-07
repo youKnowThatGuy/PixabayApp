@@ -108,7 +108,6 @@
 				69626637257D836F001B2FCE /* ImageCell.swift */,
 				697368F52592856E000EAD42 /* ImageScrollView.swift */,
 				697368F825933C76000EAD42 /* StandartLayout.swift */,
-				695E8CE525A375440040F908 /* SearchResultsTableViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -120,6 +119,7 @@
 				69086DFA258129940045216D /* SearchViewController.swift */,
 				692A6C31259201C80094AC94 /* ImageDetailViewController.swift */,
 				697368F225923DFB000EAD42 /* ImageZoomViewController.swift */,
+				695E8CE525A375440040F908 /* SearchResultsTableViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
