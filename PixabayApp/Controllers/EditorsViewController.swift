@@ -29,7 +29,6 @@ class EditorsViewController: UICollectionViewController {
     
     private func configureView(){
         collectionView.collectionViewLayout = customLayout()
-        //getCachedImages()
         loadImages()
         setupSpinner(spinner: activityIndicator)
         let logoImage = UIImage(named: "logo")!
@@ -83,19 +82,17 @@ class EditorsViewController: UICollectionViewController {
         
         CacheManager.shared.getImage(with: info.id) { (image) in
             if (image != nil){
-                //cell.configure(with: image)
                 self.images.append(image)
                 return
             }
         }
  
         
-        NetworkService.shared.loadImage(from: info.previewURL) { (image) in
+        NetworkService.shared.loadImage(from: info.webformatURL) { (image) in
             self.images[index] = image
             self.images.append(image)
             CacheManager.shared.cacheImage(image, with: info.id)
             cell.configure(with: self.images[index])
-            //self.images.append(image)
         }
     }
 
@@ -118,7 +115,7 @@ class EditorsViewController: UICollectionViewController {
     
     
     private let numberOfItemsPerRow: CGFloat = 3
-    private let spacing: CGFloat = 2
+    private let spacing: CGFloat = 1
     
     /*
     private func prepareLayout(){
@@ -139,23 +136,15 @@ class EditorsViewController: UICollectionViewController {
     
     //MARK: custom layout
     private func customLayout()-> UICollectionViewLayout{
-        //first layer
-        /*
-        let fullImageItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalWidth(2/3)))
-        fullImageItem.contentInsets = NSDirectionalEdgeInsets(top: spacing, leading: spacing, bottom: spacing, trailing: spacing)
- */
         
         //second layer
-        let mainItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(2/3), heightDimension: .fractionalHeight(1.0)))
+        let mainItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3), heightDimension: .fractionalHeight(1.0)))
         mainItem.contentInsets = NSDirectionalEdgeInsets(top: spacing, leading: spacing, bottom: spacing, trailing: spacing)
         
-        let pairItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(0.5)))
+        let pairItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(2/3), heightDimension: .fractionalHeight(1.0)))
         pairItem.contentInsets = NSDirectionalEdgeInsets(top: spacing, leading: spacing, bottom: spacing, trailing: spacing)
         
-        let trailingGroup = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3), heightDimension: .fractionalHeight(1.0)), subitem: pairItem, count: 2)
-        
-        let mainWithPairGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(4/9)), subitems: [mainItem, trailingGroup])
+        let mainWithPairGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(4/9)), subitems: [mainItem, pairItem])
         
         //third layer
         let tripletItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/4), heightDimension: .fractionalHeight(1.0)))
@@ -164,7 +153,16 @@ class EditorsViewController: UICollectionViewController {
         let tripletGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(2/9)), subitems: [tripletItem, tripletItem, tripletItem, tripletItem])
         
         //fourth layer
-        let mainWithPairReverse = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(4/9)), subitems: [trailingGroup, mainItem])
+        let mainItemR = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(2/3), heightDimension: .fractionalHeight(1.0)))
+        mainItem.contentInsets = NSDirectionalEdgeInsets(top: spacing, leading: spacing, bottom: spacing, trailing: spacing)
+        
+        let pairItemR = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(0.5)))
+        pairItem.contentInsets = NSDirectionalEdgeInsets(top: spacing, leading: spacing, bottom: spacing, trailing: spacing)
+        
+        let trailingGroup = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3), heightDimension: .fractionalHeight(1.0)), subitem: pairItemR, count: 2)
+        
+        
+        let mainWithPairReverse = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(4/9)), subitems: [trailingGroup, mainItemR])
         
         //final preparations
         

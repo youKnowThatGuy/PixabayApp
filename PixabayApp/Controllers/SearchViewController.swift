@@ -15,11 +15,17 @@ class SearchViewController: UICollectionViewController {
     private var images: [UIImage?] = []
     private var imagesInfo = [ImageInfo]()
     
+    var searchController: UISearchController!
+    
+    /// The search results table view.
+    var resultsTableController: SearchResultsTableViewController!
+    
     
     private var activityIndicator = UIActivityIndicatorView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadRecentSearch()
         configureView()
         
     }
@@ -27,16 +33,31 @@ class SearchViewController: UICollectionViewController {
     private func configureView(){
         setupSpinner(spinner: activityIndicator)
         setupSearchBar()
-        //getCachedImages()
 
     }
     
+    private func loadRecentSearch(){
+        CacheManager.shared.getSearches { (searches) in
+            self.resultsTableController.suggestedSearches = searches.components(separatedBy: ", ")
+        }
+    }
+    
+    private func saveRecentSearch(query: String){
+        resultsTableController.updateSearchTable(newSearch: query)
+        CacheManager.shared.cacheSearches(resultsTableController.suggestedSearches.joined(separator: ", "))
+        
+    }
+    
     private func setupSearchBar(){
-        let searchC = UISearchController(searchResultsController: nil)
-        searchC.searchBar.placeholder = "Search"
-        searchC.searchBar.delegate = self
-        searchC.obscuresBackgroundDuringPresentation = false
-        navigationItem.searchController = searchC
+        resultsTableController = SearchResultsTableViewController()
+        resultsTableController.suggestedSearchDelegate = self
+        
+        searchController = UISearchController(searchResultsController: resultsTableController)
+        searchController.delegate = self
+        searchController.searchBar.placeholder = "Search"
+        searchController.searchBar.delegate = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        navigationItem.searchController = searchController
     }
     
     func choiceCheck(){
@@ -85,13 +106,6 @@ class SearchViewController: UICollectionViewController {
         choiceCheck()
         self.collectionView.reloadSections(IndexSet(arrayLiteral: 0))
     }
-
-    private func getCachedImages(){
-        CacheManager.shared.getCachedImages { (images) in
-            self.images = images
-            self.updateUI()
-        }
-    }
     
     
     private func loadSingleImage(for cell: ImageCell, at index: Int){
@@ -101,7 +115,7 @@ class SearchViewController: UICollectionViewController {
         }
         
         let info = imagesInfo[index]
-        NetworkService.shared.loadImage(from: info.previewURL) { (image) in
+        NetworkService.shared.loadImage(from: info.webformatURL) { (image) in
             self.images[index] = image
             
             CacheManager.shared.cacheImage(image, with: info.id)
@@ -157,6 +171,19 @@ class SearchViewController: UICollectionViewController {
 }
 
 
+extension SearchViewController{
+    func setToSuggestedSearches() {
+
+            resultsTableController.showSuggestedSearches = true
+            
+            // We are no longer interested in cell navigating, since we are now showing the suggested searches.
+            resultsTableController.tableView.delegate = resultsTableController
+    }
+    
+    
+}
+
+
 extension SearchViewController: UISearchBarDelegate{
     func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
         true
@@ -167,10 +194,48 @@ extension SearchViewController: UISearchBarDelegate{
             return
         }
         loadImages(query: query)
+        saveRecentSearch(query: query)
+        searchController.dismiss(animated: true, completion: nil)
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text!.isEmpty {
+            // Text is empty, show suggested searches again.
+            setToSuggestedSearches()
+        } else {
+            resultsTableController.showSuggestedSearches = false
+        }
+    }
+    
+
+    
+    
+    
+}
+
+extension SearchViewController: UISearchControllerDelegate {
+    
+    // We are being asked to present the search controller, so from the start - show suggested searches.
+    func presentSearchController(_ searchController: UISearchController) {
+        searchController.showsSearchResultsController = true
+        setToSuggestedSearches()
     }
 }
 
-
+extension SearchViewController: SuggestedSearch {
+    func didSelectSuggestedSearch(word: String) {
+         let searchField = navigationItem.searchController?.searchBar
+          searchField!.text = word
+          loadImages(query: word)
+        searchController.dismiss(animated: true, completion: nil)
+            
+            // Hide the suggested searches now that we have a token.
+            resultsTableController.showSuggestedSearches = false
+            
+            // Update the search query with the newly inserted token.
+    }
+    
+}
 
 
 
