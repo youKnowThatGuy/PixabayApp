@@ -25,17 +25,23 @@ class SearchViewController: UICollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        prepareLayout()
+        if let layout = collectionView?.collectionViewLayout as? PinterestLayout {
+          layout.delegate = self
+        }
+
         loadRecentSearch()
         configureView()
         
     }
     
     private func configureView(){
+        //prepareLayout()
         setupSpinner(spinner: activityIndicator)
         setupSearchBar()
 
     }
+    
+    
     
     private func loadRecentSearch(){
         CacheManager.shared.getSearches { (searches) in
@@ -60,6 +66,8 @@ class SearchViewController: UICollectionViewController {
         searchController.obscuresBackgroundDuringPresentation = false
         navigationItem.searchController = searchController
     }
+    
+    
     
     func choiceCheck(){
         switch searchSwitch.selectedSegmentIndex {
@@ -199,6 +207,16 @@ class SearchViewController: UICollectionViewController {
 }
 
 
+extension SearchViewController: PinterestLayoutDelegate {
+  func collectionView(
+      _ collectionView: UICollectionView,
+      heightForPhotoAtIndexPath indexPath:IndexPath) -> CGFloat {
+    return CGFloat(imagesInfo[indexPath.row].webformatHeight)
+  }
+}
+
+
+
 extension SearchViewController{
     func setToSuggestedSearches() {
 
@@ -211,6 +229,10 @@ extension SearchViewController{
     
 }
 
+
+
+
+//MARK: Search Bar config
 
 extension SearchViewController: UISearchBarDelegate{
     func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {

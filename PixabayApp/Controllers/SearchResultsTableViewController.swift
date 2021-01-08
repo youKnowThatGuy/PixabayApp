@@ -31,9 +31,9 @@ class SearchResultsTableViewController: UITableViewController {
 
     func updateSearchTable(newSearch: String){
         if (suggestedSearches.count >= 5){
-            suggestedSearches.removeFirst()
+            suggestedSearches.removeLast()
         }
-        suggestedSearches.append(newSearch)
+        suggestedSearches.insert(newSearch, at: 0)
         
     }
     
@@ -52,11 +52,7 @@ class SearchResultsTableViewController: UITableViewController {
 
         if showSuggestedSearches {
             let suggestedtitle = NSMutableAttributedString(string: suggestedSearches[indexPath.row])
-            /*
-            suggestedtitle.addAttribute(NSAttributedString.Key.foregroundColor,
-                                        value: UIColor.label,
-                                        range: NSRange(location: 0, length: suggestedtitle.length))
- */
+        
             cell.textLabel?.attributedText = suggestedtitle
             
             // No detailed text or accessory for suggested searches.

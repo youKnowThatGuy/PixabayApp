@@ -30,7 +30,6 @@ class ImageDetailViewController: UIViewController {
         fullImageView.addGestureRecognizer(tapReact)
         
         prepareView()
-        // Do any additional setup after loading the view.
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -44,11 +43,11 @@ class ImageDetailViewController: UIViewController {
         viewsLabel.text = "\(imageInfo.views)"
         authorNameLabel.text = "commited by: \(imageInfo.user)"
         tagsLabel.text = "tags: \(imageInfo.tags)"
-        loadImages()
+        loadImage()
         
     }
     
-    private func loadImages(){
+    private func loadImage(){
         NetworkService.shared.loadImage(from: imageInfo.largeImageURL) { (image) in
             self.fullImageView.image = image
         }

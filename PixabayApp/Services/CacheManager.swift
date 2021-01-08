@@ -49,6 +49,14 @@ class CacheManager{
     }
     
     
+    
+    
+    
+    
+    
+    
+    
+    //-MARK: SEARCH CACHING
     func cacheSearches(_ dataForjson: String?, completion: ((Bool)-> Void)? = nil){
         DispatchQueue.global(qos: .utility).async { [self] in
         
@@ -86,6 +94,13 @@ class CacheManager{
             }
         }
     }
+    
+    
+    
+    
+    
+    
+    
     
     
     
