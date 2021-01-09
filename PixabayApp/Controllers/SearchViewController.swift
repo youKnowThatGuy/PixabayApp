@@ -122,6 +122,8 @@ class SearchViewController: UICollectionViewController {
     
     //-MARK: fLOW LAYOUT
     
+    /*
+    
     private let numberOfItemsPerRow: CGFloat = 3
     private let spacing: CGFloat = 5
     private func prepareLayout(){
@@ -137,6 +139,8 @@ class SearchViewController: UICollectionViewController {
         collectionView.collectionViewLayout = StandartLayout(itemSize: itemSize, insetForSection: UIEdgeInsets(top: spacing, left: spacing, bottom: spacing, right: spacing), lineSpacing: spacing, interItemSpacing: spacing)
         
     }
+ 
+ */
     
     
     
@@ -207,6 +211,7 @@ class SearchViewController: UICollectionViewController {
 }
 
 
+//MARK: pinterest Layout
 extension SearchViewController: PinterestLayoutDelegate {
   func collectionView(
       _ collectionView: UICollectionView,

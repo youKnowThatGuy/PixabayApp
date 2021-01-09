@@ -80,7 +80,7 @@ class PinterestLayout: UICollectionViewLayout {
           
         // 6
         contentHeight = max(contentHeight, frame.maxY)
-        yOffset[column] = yOffset[column] + height - 250
+        yOffset[column] = yOffset[column] + height - 200
         
         column = column < (numberOfColumns - 1) ? (column + 1) : 0
       }
