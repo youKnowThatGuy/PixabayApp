@@ -78,14 +78,12 @@ class EditorsViewController: UICollectionViewController {
                 self.images.append(image)
                 return
             }
-        }
- 
-        
-        NetworkService.shared.loadImage(from: info.webformatURL) { (image) in
-            self.images[index] = image
-            self.images.append(image)
-            CacheManager.shared.cacheImage(image, with: info.id)
-            cell.configure(with: self.images[index])
+            NetworkService.shared.loadImage(from: info.webformatURL) { (image) in
+                self.images[index] = image
+                self.images.append(image)
+                CacheManager.shared.cacheImage(image, with: info.id)
+                cell.configure(with: self.images[index])
+            }
         }
     }
 

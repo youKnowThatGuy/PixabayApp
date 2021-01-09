@@ -65,8 +65,10 @@ class CacheManager{
             return
         }
       let jsonUrl = getServicesDirectory().appendingPathComponent("searchHistory.json")
-        
-       
+            /*
+            let mass: [String] = []
+            let newData = try JSONEncoder().encode(mass)
+       */
         
         do{
             try data.write(to: jsonUrl, atomically: true, encoding: .utf8)
