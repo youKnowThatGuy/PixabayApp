@@ -94,7 +94,7 @@ class SearchViewController: UICollectionViewController {
         images.removeAll()
         updateUI()
         activityIndicator.startAnimating()
-        NetworkService.shared.fetchImagesForSearch(query: query ,amount: 70, filter: searchFilter) { (result) in
+        NetworkService.shared.fetchImagesForSearch(query: query ,amount: 72, filter: searchFilter) { (result) in
             self.activityIndicator.stopAnimating()
             
             switch result{
@@ -280,6 +280,11 @@ extension SearchViewController: UISearchControllerDelegate {
 extension SearchViewController: SuggestedSearch {
     func didSelectSuggestedSearch(word: String) {
          let searchField = navigationItem.searchController?.searchBar
+        if (searchField!.text == word){
+            searchController.dismiss(animated: true, completion: nil)
+            resultsTableController.showSuggestedSearches = false
+            return
+        }
           searchField!.text = word
           loadImages(query: word)
         searchController.dismiss(animated: true, completion: nil)

@@ -62,6 +62,14 @@ class SearchResultsTableViewController: UITableViewController {
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            suggestedSearches.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            CacheManager.shared.cacheSearches(suggestedSearches.joined(separator: ", "))
+        }
+    }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // We must have a delegate to respond to row selection.
         guard let suggestedSearchDelegate = suggestedSearchDelegate else { return }
