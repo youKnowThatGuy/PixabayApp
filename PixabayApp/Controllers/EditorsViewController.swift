@@ -10,7 +10,9 @@ import UIKit
 class EditorsViewController: UICollectionViewController {
     
     private var images: [UIImage?] = []
-    private var imagesInfo = [ImageInfo]()
+     private var imagesInfo = [ImageInfo]()
+    
+    private var currentIndex: Int!
     
     private var activityIndicator = UIActivityIndicatorView()
 
@@ -99,7 +101,11 @@ class EditorsViewController: UICollectionViewController {
                   let image = sender as? ImageInfo
             else {fatalError("Invalid data passed")}
             vc.imageInfo = image
-            
+            let imagesData = ImageData()
+            imagesData.imagesInfo = imagesInfo
+            vc.parentDataSet = imagesData
+            vc.imageIndex = currentIndex
+    
         default:
             break
         }
@@ -199,6 +205,7 @@ class EditorsViewController: UICollectionViewController {
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedImage = imagesInfo[indexPath.row]
+        currentIndex = indexPath.row
         performSegue(withIdentifier: "showEditorsImage", sender: selectedImage)
     }
     

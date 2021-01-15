@@ -14,6 +14,7 @@ class SearchViewController: UICollectionViewController {
     
     private var images: [UIImage?] = []
     private var imagesInfo = [ImageInfo]()
+    private var currentIndex: Int!
     
     var searchController: UISearchController!
     
@@ -170,6 +171,10 @@ class SearchViewController: UICollectionViewController {
                   let image = sender as? ImageInfo
             else {fatalError("Invalid data passed")}
             vc.imageInfo = image
+            let imagesData = ImageData()
+            imagesData.imagesInfo = imagesInfo
+            vc.parentDataSet = imagesData
+            vc.imageIndex = currentIndex
             
         default:
             break
@@ -191,6 +196,7 @@ class SearchViewController: UICollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedImage = imagesInfo[indexPath.row]
+        currentIndex = indexPath.row
         performSegue(withIdentifier: "showDetailImage", sender: selectedImage)
     }
   

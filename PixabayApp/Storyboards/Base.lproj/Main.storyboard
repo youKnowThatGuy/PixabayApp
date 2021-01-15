@@ -70,7 +70,7 @@
         <!--Image Detail View Controller-->
         <scene sceneID="K0j-nG-rMJ">
             <objects>
-                <viewController id="igo-Je-InV" customClass="ImageDetailViewController" customModule="PixabayApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="detailVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="igo-Je-InV" customClass="ImageDetailViewController" customModule="PixabayApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="RBc-TO-2Ng">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -234,7 +234,7 @@
         <!--Image Zoom View Controller-->
         <scene sceneID="uhn-yO-If6">
             <objects>
-                <viewController id="HeA-xT-Kro" customClass="ImageZoomViewController" customModule="PixabayApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="someVC" id="HeA-xT-Kro" customClass="ImageZoomViewController" customModule="PixabayApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="EVd-K0-Y2h">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

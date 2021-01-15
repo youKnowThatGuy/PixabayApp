@@ -33,7 +33,7 @@ class ImageZoomViewController: UIViewController {
         imageScrollView.isUserInteractionEnabled = true
         
         let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(imageTapped))
-        longPressRecognizer.minimumPressDuration = 1.0
+        longPressRecognizer.minimumPressDuration = 0.5
         imageScrollView.addGestureRecognizer(longPressRecognizer)
         
     }
@@ -42,11 +42,42 @@ class ImageZoomViewController: UIViewController {
     
     //-MARK: image saving func
     @objc func imageTapped(sender: UILongPressGestureRecognizer){
-        
-        if (!savingImageisFinished){
-        UIImageWriteToSavedPhotosAlbum(image, self, #selector(saveImage(_:didFinishSavingWithError:contextInfo:)), nil)
-        savingImageisFinished = true
-        }
+        //let firstActivityItem = "Description you want.."
+            
+            // If you want to use an image
+            let savImage : UIImage = image
+            let activityViewController : UIActivityViewController = UIActivityViewController(
+                activityItems: [savImage], applicationActivities: nil)
+            
+            // This lines is for the popover you need to show in iPad
+            //activityViewController.popoverPresentationController?.sourceView = (sender as! UIButton)
+            
+            // This line remove the arrow of the popover to show in iPad
+            activityViewController.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection.down
+            activityViewController.popoverPresentationController?.sourceRect = CGRect(x: 150, y: 150, width: 0, height: 0)
+            
+            // Pre-configuring activity items
+            activityViewController.activityItemsConfiguration = [
+                UIActivity.ActivityType.message, UIActivity.ActivityType.mail, UIActivity.ActivityType.saveToCameraRoll, UIActivity.ActivityType.airDrop
+            ] as? UIActivityItemsConfigurationReading
+            
+            // Anything you want to exclude
+        /*
+            activityViewController.excludedActivityTypes = [
+                UIActivity.ActivityType.postToWeibo,
+                UIActivity.ActivityType.print,
+                UIActivity.ActivityType.assignToContact,
+                UIActivity.ActivityType.saveToCameraRoll,
+                UIActivity.ActivityType.addToReadingList,
+                UIActivity.ActivityType.postToFlickr,
+                UIActivity.ActivityType.postToVimeo,
+                UIActivity.ActivityType.postToTencentWeibo,
+                UIActivity.ActivityType.postToFacebook
+            ]
+ */
+            
+            activityViewController.isModalInPresentation = true
+            self.present(activityViewController, animated: true, completion: nil)
     }
     
     @objc func saveImage (_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
