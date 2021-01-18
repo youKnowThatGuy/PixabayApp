@@ -15,6 +15,7 @@ class SearchViewController: UICollectionViewController {
     private var images: [UIImage?] = []
     private var imagesInfo = [ImageInfo]()
     private var currentIndex: Int!
+    private var layout: PinterestLayout!
     
     var searchController: UISearchController!
     
@@ -26,13 +27,17 @@ class SearchViewController: UICollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let layout = collectionView?.collectionViewLayout as? PinterestLayout {
-          layout.delegate = self
-        }
+        layout = collectionView?.collectionViewLayout as? PinterestLayout
+        layout.delegate = self
 
         loadRecentSearch()
         configureView()
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.tabBarController?.tabBar.isHidden = false
+        setupSearchBar()
     }
     
     private func configureView(){
@@ -81,6 +86,11 @@ class SearchViewController: UICollectionViewController {
         }
     }
     
+    @IBAction func settingsButtonPressed(_ sender: Any) {
+        performSegue(withIdentifier: "showAppSettings", sender: nil)
+    }
+    
+    
     private func setupSpinner(spinner: UIActivityIndicatorView) {
             spinner.hidesWhenStopped = true
             spinner.style = .medium
@@ -92,6 +102,7 @@ class SearchViewController: UICollectionViewController {
 
     
     private func loadImages(query: String){
+        layout.cache = []
         images.removeAll()
         updateUI()
         activityIndicator.startAnimating()
@@ -175,6 +186,10 @@ class SearchViewController: UICollectionViewController {
             imagesData.imagesInfo = imagesInfo
             vc.parentDataSet = imagesData
             vc.imageIndex = currentIndex
+            
+        case "showAppSettings":
+            guard segue.destination is SettingsViewController
+            else {fatalError("Invalid data passed")}
             
         default:
             break
