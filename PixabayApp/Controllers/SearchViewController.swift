@@ -55,7 +55,7 @@ class SearchViewController: UICollectionViewController {
         }
     }
     
-    private func saveRecentSearch(query: String){
+     func saveRecentSearch(query: String){
         resultsTableController.updateSearchTable(newSearch: query)
         CacheManager.shared.cacheSearches(resultsTableController.suggestedSearches.joined(separator: ", "))
         
@@ -188,8 +188,9 @@ class SearchViewController: UICollectionViewController {
             vc.imageIndex = currentIndex
             
         case "showAppSettings":
-            guard segue.destination is SettingsViewController
+            guard let vc = segue.destination as? SettingsViewController
             else {fatalError("Invalid data passed")}
+            vc.parentVC = self
             
         default:
             break

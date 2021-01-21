@@ -25,6 +25,7 @@
 		69626644257D8FF6001B2FCE /* SessionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69626643257D8FF6001B2FCE /* SessionError.swift */; };
 		69626647257D917D001B2FCE /* ImageInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69626646257D917D001B2FCE /* ImageInfo.swift */; };
 		6962664A257D98F9001B2FCE /* ServerResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69626649257D98F9001B2FCE /* ServerResponse.swift */; };
+		69704C0125B873A7005C8CDB /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69704C0025B873A7005C8CDB /* AppSettings.swift */; };
 		697368F325923DFB000EAD42 /* ImageZoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 697368F225923DFB000EAD42 /* ImageZoomViewController.swift */; };
 		697368F62592856E000EAD42 /* ImageScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 697368F52592856E000EAD42 /* ImageScrollView.swift */; };
 		697368F925933C76000EAD42 /* StandartLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 697368F825933C76000EAD42 /* StandartLayout.swift */; };
@@ -51,6 +52,7 @@
 		69626643257D8FF6001B2FCE /* SessionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionError.swift; sourceTree = "<group>"; };
 		69626646257D917D001B2FCE /* ImageInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageInfo.swift; sourceTree = "<group>"; };
 		69626649257D98F9001B2FCE /* ServerResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerResponse.swift; sourceTree = "<group>"; };
+		69704C0025B873A7005C8CDB /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		697368F225923DFB000EAD42 /* ImageZoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageZoomViewController.swift; sourceTree = "<group>"; };
 		697368F52592856E000EAD42 /* ImageScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageScrollView.swift; sourceTree = "<group>"; };
 		697368F825933C76000EAD42 /* StandartLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandartLayout.swift; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 				69626643257D8FF6001B2FCE /* SessionError.swift */,
 				69626646257D917D001B2FCE /* ImageInfo.swift */,
 				69626649257D98F9001B2FCE /* ServerResponse.swift */,
+				69704C0025B873A7005C8CDB /* AppSettings.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -239,6 +242,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				69086DFB258129940045216D /* SearchViewController.swift in Sources */,
+				69704C0125B873A7005C8CDB /* AppSettings.swift in Sources */,
 				697368F62592856E000EAD42 /* ImageScrollView.swift in Sources */,
 				695E8CE625A375440040F908 /* SearchResultsTableViewController.swift in Sources */,
 				69626647257D917D001B2FCE /* ImageInfo.swift in Sources */,

@@ -72,7 +72,6 @@ class CacheManager{
         
         do{
             try data.write(to: jsonUrl, atomically: true, encoding: .utf8)
-            print("image was saved to \(jsonUrl)")
             completion?(true)
         }
         catch {
@@ -98,7 +97,46 @@ class CacheManager{
     }
     
     
+    func cacheSettings(_ dataForjson: AppSettings?, completion: ((Bool)-> Void)? = nil){
+        DispatchQueue.global(qos: .utility).async { [self] in
+            
+            guard let data = dataForjson else{
+                completion?(false)
+                return
+            }
+          let jsonUrl = getServicesDirectory().appendingPathComponent("userSettings.json")
+            do{
+                let codedData = try JSONEncoder().encode(data.self)
+                try codedData.write(to: jsonUrl)
+                completion?(true)
+            }
+            catch {
+                print(error)
+                completion?(false)
+            }
+        }
+    }
     
+    func getSettings(completion: @escaping (AppSettings?) -> Void){
+        let jsonUrl = getServicesDirectory().appendingPathComponent("userSettings.json")
+        DispatchQueue.global(qos: .userInteractive).async {
+            
+            if let data = self.fileManager.contents(atPath: jsonUrl.path){
+                do{
+                     let settings = try JSONDecoder().decode(AppSettings.self, from: data)
+                        DispatchQueue.main.async {
+                           completion(settings)
+                         }
+                   }
+                
+                catch{
+                      print(error)
+                       completion(nil)
+                     }
+            }
+            
+        }
+    }
     
     
     
@@ -157,6 +195,15 @@ class CacheManager{
         }
     }
     
+    func tryClearCache()-> Bool{
+        do{
+            try fileManager.removeItem(atPath: getCachesDirectory().path)
+            return true
+        }
+        catch{
+            return false
+        }
+    }
     
     
     private func getCachedImagePaths()-> [String]{

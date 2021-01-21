@@ -15,6 +15,9 @@ class EditorsViewController: UICollectionViewController {
     private var currentIndex: Int!
     
     private var activityIndicator = UIActivityIndicatorView()
+    
+    private var cachingEnabled: Bool!
+    private var ecoMode: Bool!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,7 +45,16 @@ class EditorsViewController: UICollectionViewController {
 
     
     private func loadImages(){
-        //images.removeAll()
+        CacheManager.shared.getSettings { (settings) in
+            if settings != nil{
+                self.cachingEnabled = settings!.cachingEnabled
+                self.ecoMode = settings!.ecoModeEnabled
+            }
+            else {
+                self.cachingEnabled = true
+                self.ecoMode = true
+            }
+        }
         updateUI()
         activityIndicator.startAnimating()
         NetworkService.shared.fetchEditorsImages(amount: 87) { (result) in
@@ -82,10 +94,17 @@ class EditorsViewController: UICollectionViewController {
                 cell.configure(with: self.images[index])
                 return
             }
-            NetworkService.shared.loadImage(from: info.webformatURL) { (image) in
+            
+            var loadUrl = info.webformatURL
+            if self.ecoMode{
+                loadUrl = info.previewURL
+            }
+            NetworkService.shared.loadImage(from: loadUrl) { (image) in
                 self.images[index] = image
                 //self.images.append(image)
+                if self.cachingEnabled{
                 CacheManager.shared.cacheImage(image, with: info.id)
+                }
                 cell.configure(with: self.images[index])
             }
         }
