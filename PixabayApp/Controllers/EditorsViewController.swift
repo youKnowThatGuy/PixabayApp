@@ -16,8 +16,8 @@ class EditorsViewController: UICollectionViewController {
     
     private var activityIndicator = UIActivityIndicatorView()
     
-    private var cachingEnabled: Bool!
-    private var ecoMode: Bool!
+    private var cachingEnabled: Bool = true
+    private var ecoMode: Bool = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,10 +49,6 @@ class EditorsViewController: UICollectionViewController {
             if settings != nil{
                 self.cachingEnabled = settings!.cachingEnabled
                 self.ecoMode = settings!.ecoModeEnabled
-            }
-            else {
-                self.cachingEnabled = true
-                self.ecoMode = true
             }
         }
         updateUI()
